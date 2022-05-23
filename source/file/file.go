@@ -15,7 +15,8 @@ type file struct {
 
 var (
 	// DefaultPath TODO
-	DefaultPath = "config.json"
+	DefaultPath            = "config.json"
+	envKeyServerConfigPath = "AB_SERVER_CONFIG_PATH"
 )
 
 // Read TODO
@@ -66,7 +67,10 @@ func (f *file) Write(cs *source.ChangeSet) error {
 // NewSource TODO
 func NewSource(opts ...source.Option) source.Source {
 	options := source.NewOptions(opts...)
-	path := DefaultPath
+	path := os.Getenv(envKeyServerConfigPath)
+	if len(path) == 0 {
+		path = DefaultPath
+	}
 	f, ok := options.Context.Value(filePathKey{}).(string)
 	if ok {
 		path = f
