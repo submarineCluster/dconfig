@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"git.code.oa.com/tencent_abtest/go-common/dconfig/encoder"
-	"git.code.oa.com/tencent_abtest/go-common/dconfig/encoder/json"
+	"git.code.oa.com/tencent_abtest/go-common/dconfig/encoder/yaml"
 	"go-micro.dev/v4/client"
 )
 
@@ -26,7 +26,7 @@ type Option func(o *Options)
 // NewOptions TODO
 func NewOptions(opts ...Option) Options {
 	options := Options{
-		Encoder: json.NewEncoder(),
+		Encoder: yaml.NewEncoder(),
 		Context: context.Background(),
 		Client:  client.DefaultClient,
 	}

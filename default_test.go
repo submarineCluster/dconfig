@@ -31,7 +31,10 @@ func createFileForIssue18(t *testing.T, content string) *os.File {
 }
 
 func createFileForTest(t *testing.T) *os.File {
-	data := []byte(`{"foo": "bar"}`)
+	data := []byte(
+		`"foo": "bar"
+"key": "value"
+`)
 	path := filepath.Join(os.TempDir(), fmt.Sprintf("file.%d", time.Now().UnixNano()))
 	fh, err := os.Create(path)
 	if err != nil {
@@ -46,12 +49,13 @@ func createFileForTest(t *testing.T) *os.File {
 }
 
 func TestConfigLoadWithGoodFile(t *testing.T) {
-	fh := createFileForTest(t)
-	path := fh.Name()
-	defer func() {
-		fh.Close()
-		os.Remove(path)
-	}()
+	// fh := createFileForTest(t)
+	// path := fh.Name()
+	// defer func() {
+	//	fh.Close()
+	//	os.Remove(path)
+	// }()
+	path := `/var/folders/l4/69cnprb14114ngj2lx4pg6j00000gn/T/file.1653286403553754000`
 
 	// Create new config
 	conf, err := NewConfig()
@@ -64,7 +68,10 @@ func TestConfigLoadWithGoodFile(t *testing.T) {
 	)); err != nil {
 		t.Fatalf("Expected no error but got %v", err)
 	}
-	conf.Bytes()
+	for {
+		t.Logf("%s", conf.Bytes())
+		time.Sleep(1 * time.Second)
+	}
 }
 
 func TestConfigLoadWithInvalidFile(t *testing.T) {
@@ -72,9 +79,10 @@ func TestConfigLoadWithInvalidFile(t *testing.T) {
 	path := fh.Name()
 	defer func() {
 		fh.Close()
-		os.Remove(path)
+		// os.Remove(path)
 	}()
 
+	fmt.Printf("%s\n", path)
 	// Create new config
 	conf, err := NewConfig()
 	if err != nil {

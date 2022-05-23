@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"git.code.oa.com/tencent_abtest/go-common/dconfig/encoder/yaml"
 	"git.code.oa.com/tencent_abtest/go-common/dconfig/loader"
 	"git.code.oa.com/tencent_abtest/go-common/dconfig/loader/memory"
 	"git.code.oa.com/tencent_abtest/go-common/dconfig/reader"
@@ -47,7 +48,7 @@ func newConfig(opts ...Option) (Config, error) {
 // Init TODO
 func (c *config) Init(opts ...Option) error {
 	c.opts = Options{
-		Reader: json.NewReader(),
+		Reader: json.NewReader(reader.WithEncoder(yaml.NewEncoder())),
 	}
 	c.exit = make(chan bool)
 	for _, o := range opts {
